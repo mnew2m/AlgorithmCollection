@@ -1,25 +1,52 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.time.*;
+import java.time.format.*;
 
 public class AlgorithmMain {
     public static void main(String[] args) {
-        // sizeAlgorithm();
-        vhLineAlgorithm();
+        // getCurDay(""); // 현재 일자 (Ex "_" -> 2022_04_14)
+        // getCurTime("", ""); // 현재일자, 시간(시, 분) (Ex "_", ":" -> 2022_04_14 11:50)
+        // getCurTime2("", ""); // 현재일자, 시간(시, 분) (Ex "_", ":" -> 2022_04_14 11:50:38)
+        // vhLineAlgorithm(); // 대각선을 기준점을 중심으로 사이즈, 각도만큼 돌린다.
+        // sizeAlgorithm(); // 해당 길이의 선을 sizeInfoList에 있는 사이즈로 잘라서 리턴시킨다.
+
     }
 
-    public static void sizeAlgorithm() {
-        SizeTest sizeTest = new SizeTest();
-        List<Integer> sizeList = sizeTest.lineDivide(3841.0);
-        System.out.println("총 갯수 : " + sizeList.size());
+    /** 현재일자 */
+    public static String getCurDay(String separation) {
+        if (separation == null || separation.equals(""))
+            separation = "_";
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy" + separation + "MM" + separation + "dd");
+        String formattedNow = now.format(formatter);
+        return formattedNow;
+    }
 
-        int loop = 1;
-        for (Integer size : sizeList) {
-            System.out.println(loop + " -> [ " + size + " ]");
-            loop++;
-        }
+    /** 현재일자, 시간(시, 분) */
+    public static String getCurTime(String dateSeparation, String timeSeparation) {
+        if ((dateSeparation == null || dateSeparation.equals(""))
+                && (timeSeparation == null || timeSeparation.equals("")))
+            dateSeparation = "_";
+        timeSeparation = ":";
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("yyyy" + dateSeparation + "MM" + dateSeparation + "dd" + " " + "HH" + timeSeparation + "mm");
+        String formattedNow = now.format(formatter);
+        return formattedNow;
+    }
+
+    /** 현재일자, 시간(시, 분, 초) */
+    public static String getCurTime2(String dateSeparation, String timeSeparation) {
+        if ((dateSeparation == null || dateSeparation.equals(""))
+                && (timeSeparation == null || timeSeparation.equals("")))
+            dateSeparation = "_";
+        timeSeparation = ":";
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "yyyy" + dateSeparation + "MM" + dateSeparation + "dd" + " " + "HH" + timeSeparation + "mm"
+                        + timeSeparation + "ss");
+        String formattedNow = now.format(formatter);
+        return formattedNow;
     }
 
     public static void vhLineAlgorithm() {
@@ -112,18 +139,18 @@ public class AlgorithmMain {
         Point rightP = new Point(org_x, org_y - distance, 0); // ↘ ↗ 방향으로 이동시킬때
 
         double dSetDegree = Math.toRadians(angle);
-        double cosq = Math.cos(dSetDegree);
-        double sinq = Math.sin(dSetDegree);
+        double cos_q = Math.cos(dSetDegree);
+        double sin_q = Math.sin(dSetDegree);
 
         double sxLeft = leftP.getX() - p.getX();
         double syLeft = leftP.getY() - p.getY();
         double sxRight = rightP.getX() - p.getX();
         double syRight = rightP.getY() - p.getY();
 
-        int rxLeft = (int) Math.round((sxLeft * cosq - syLeft * sinq) + p.getX());
-        int ryLeft = (int) Math.round((sxLeft * sinq + syLeft * cosq) + p.getY());
-        int rxRight = (int) Math.round((sxRight * cosq - syRight * sinq) + p.getX());
-        int ryRight = (int) Math.round((sxRight * sinq + syRight * cosq) + p.getY());
+        int rxLeft = (int) Math.round((sxLeft * cos_q - syLeft * sin_q) + p.getX());
+        int ryLeft = (int) Math.round((sxLeft * sin_q + syLeft * cos_q) + p.getY());
+        int rxRight = (int) Math.round((sxRight * cos_q - syRight * sin_q) + p.getX());
+        int ryRight = (int) Math.round((sxRight * sin_q + syRight * cos_q) + p.getY());
 
         Map<String, Point> map = new HashMap<String, Point>();
         map.put("left", new Point(rxLeft, ryLeft, 0));
@@ -131,6 +158,18 @@ public class AlgorithmMain {
 
         return map;
 
+    }
+
+    public static void sizeAlgorithm() {
+        SizeTest sizeTest = new SizeTest();
+        List<Integer> sizeList = sizeTest.lineDivide(3841.0);
+        System.out.println("총 갯수 : " + sizeList.size());
+
+        int loop = 1;
+        for (Integer size : sizeList) {
+            System.out.println(loop + " -> [ " + size + " ]");
+            loop++;
+        }
     }
 }
 
